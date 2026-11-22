@@ -282,3 +282,25 @@ ssh -T git@example.com
 
 提交身份只在 `git clone` 成功后写入。如果目标目录中已经存在同名仓库，`git clone`
 会失败，此时不会覆盖该仓库已有的 `user.name` / `user.email` 配置。
+
+
+### 4. macOS 提示“无法验证开发者”
+
+macOS 首次运行从网络下载且未签名的 `git-tool` 时，会提示“Apple 无法验证
+‘git-tool’是否包含恶意软件”。这是 Gatekeeper 的安全拦截，并不代表程序一定有问题。
+
+1. 在首次提示框中点击“完成”（不要点“移到废纸篓”）。
+2. 打开“系统设置” → “隐私与安全性”，向下滚动到“安全性”区域。
+3. 找到被拦截的 `git-tool`，点击“仍要打开”（旧版 macOS 显示为“允许”或
+   “Open Anyway”），按提示输入登录密码或使用触控 ID。
+4. 在再次弹出的确认框中选择“仍要打开”，之后即可正常运行。
+
+  ![在隐私与安全性中允许运行](assets/macos_blocked.png)
+
+  ![确认打开](assets/macos_open-anyway.png)
+
+> 只应从本项目的 GitHub Releases 下载程序。如果页面中没有“仍要打开”，
+> 请确认下载后至少启动过一次，再重新打开“隐私与安全性”页面查看。
+>
+> 如果提示“应用已损坏，无法打开”，且已确认文件来源可信，可以在终端执行
+> `xattr -d com.apple.quarantine /path/to/git-tool` 移除下载隔离属性。
