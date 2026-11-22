@@ -1,0 +1,8 @@
+/target
+.logs
+**/logs
+**/*.log
+
+# 本地令牌文件，避免通过 -e 指向仓库内路径时被误提交
+.git-tool-env
+**/.git-tool-env

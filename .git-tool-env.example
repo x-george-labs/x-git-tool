@@ -1,0 +1,28 @@
+# git-tool 配置文件示例
+# 复制到用户主目录后按实际情况修改：
+#   cp .git-tool-env.example ~/.git-tool-env
+#   chmod 600 ~/.git-tool-env
+#
+# 分组前的键为所有分组共享；[分组名] 下的键只在该分组生效。
+# 使用 -p/--profile 指定分组，组 ID 每次 init 时用 -g 手动指定，例如：
+#   git-tool init -p work -g <组ID>
+
+# 可选：所有分组共享的提交身份
+# GITLAB_COMMIT_USER_NAME=<author_name>
+# GITLAB_COMMIT_USER_EMAIL=<author@example.com>
+
+[work]
+# 公司 GitLab 实例地址，结尾不要带斜杠
+GITLAB_BASE_URL=https://gitlab.example.com
+# 个人访问令牌，建议只授予 read_api 权限
+GITLAB_ACCESS_TOKEN=<your_work_gitlab_access_token>
+# 克隆后写入仓库本地配置的提交身份（可选）
+GITLAB_COMMIT_USER_NAME=<work_author_name>
+GITLAB_COMMIT_USER_EMAIL=<work_author@example.com>
+
+[personal]
+# 个人 GitLab 实例，例如 gitlab.com
+GITLAB_BASE_URL=https://gitlab.com
+GITLAB_ACCESS_TOKEN=<your_personal_gitlab_access_token>
+GITLAB_COMMIT_USER_NAME=<personal_author_name>
+GITLAB_COMMIT_USER_EMAIL=<personal_author@example.com>

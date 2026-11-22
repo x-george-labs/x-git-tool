@@ -1,0 +1,23 @@
+[package]
+name = "git-tool"
+version = "1.0.0"
+edition = "2024"
+repository = "https://github.com/x-george-labs/x-git-tool"
+
+[package.metadata.wix]
+upgrade-guid = "CE4B97A8-8A20-49C5-BB94-702470AE3429"
+path-guid = "6E37C4C4-C2E4-4609-9EA8-0DB19D201713"
+license = false
+eula = false
+
+[dependencies]
+tokio = { version = "1.54.1", features = ["full"] }
+clap = { version = "4.6.9", features = ["derive", "env"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+reqwest = { version = "0.13.5", features = ["blocking","rustls", "json"] }
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
