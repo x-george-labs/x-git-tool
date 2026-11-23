@@ -118,7 +118,50 @@ GIT_TOOL_PROFILE=work git-tool init -g 123
 避免误用上一次 `init` 的组。推荐把地址和令牌放在配置文件中，命令行只保留
 `-p` 和 `-g`，避免令牌进入 shell 历史和进程列表。
 
-### 6. 生成 GitLab 访问令牌
+### 6. 配置 GitLab SSH 密钥（Windows / macOS）
+
+`init` 通过 SSH 地址克隆仓库，首次使用前需要把本机公钥添加到 GitLab。
+SSH 密钥用于克隆代码，访问令牌用于调用 GitLab API，两者都需要配置。
+
+#### macOS
+
+1. 生成密钥（邮箱替换为你的 GitLab 邮箱，一路回车使用默认路径）：
+   ```bash
+   ssh-keygen -t ed25519 -C "<你的邮箱>"
+   ```
+2. 复制公钥：
+   ```bash
+   pbcopy < ~/.ssh/id_ed25519.pub
+   ```
+3. 打开 GitLab，点击右上角头像 → **编辑个人资料 / Edit profile** → **SSH 密钥 / SSH Keys**
+   → **添加新密钥 / Add new key**，粘贴公钥后保存。
+4. 验证：
+   ```bash
+   ssh -T git@<你的GitLab域名>
+   ```
+   出现 `Welcome to GitLab, @username!` 表示配置成功。
+
+#### Windows
+
+1. 在 PowerShell 中生成密钥（Windows 10/11 通常已自带 OpenSSH）：
+   ```powershell
+   ssh-keygen -t ed25519 -C "<你的邮箱>"
+   ```
+   默认保存到 `C:\Users\<用户名>\.ssh\id_ed25519`。
+2. 复制公钥：
+   ```powershell
+   Get-Content $env:USERPROFILE\.ssh\id_ed25519.pub | Set-Clipboard
+   ```
+3. 在 GitLab 中按上面的路径添加 SSH 密钥。
+4. 验证：
+   ```powershell
+   ssh -T git@<你的GitLab域名>
+   ```
+
+> 只上传 `.pub` 公钥，不要泄露没有 `.pub` 后缀的私钥。
+> 如果提示 `ssh-keygen` 不存在，在“设置 → 应用 → 可选功能”中安装“OpenSSH 客户端”。
+
+### 7. 生成 GitLab 访问令牌
 
 1. 打开 `https://<你的 GitLab 地址>/-/user_settings/personal_access_tokens`
 2. 点击“添加新令牌”
@@ -129,7 +172,7 @@ GIT_TOOL_PROFILE=work git-tool init -g 123
 
 ![添加新令牌](assets/api_token.png)
 
-### 7. 获取项目组 ID
+### 8. 获取项目组 ID
 
 进入目标项目组页面，复制项目组 ID：
 
@@ -163,6 +206,8 @@ git-tool checkout -h
 | `-V, --version` | 查看版本 |
 
 ### init：批量克隆仓库
+
+`init` 使用 SSH 地址克隆，首次使用请先完成“二、6 配置 GitLab SSH 密钥”。
 
 ```bash
 git-tool init -p work -g 123
@@ -217,26 +262,27 @@ git-tool checkout -d ~/work-projects -b develop
 
 ## 四、推荐使用流程
 
-1. 在 `~/.git-tool-env` 中配置好 `work` 和 `personal` 两个分组。
-2. 克隆公司项目：
+1. 按“二、6”配置 GitLab SSH 密钥。
+2. 在 `~/.git-tool-env` 中配置好 `work` 和 `personal` 两个分组。
+3. 克隆公司项目：
 
    ```bash
    git-tool init -p work -g 123 -d ~/work-projects
    ```
 
-3. 日常更新公司项目：
+4. 日常更新公司项目：
 
    ```bash
    git-tool pull -d ~/work-projects -b master
    ```
 
-4. 需要切换分支时：
+5. 需要切换分支时：
 
    ```bash
    git-tool checkout -d ~/work-projects -b develop
    ```
 
-5. 处理个人项目时只需切换分组：
+6. 处理个人项目时只需切换分组：
 
    ```bash
    git-tool init -p personal -g 456 -d ~/personal-projects
